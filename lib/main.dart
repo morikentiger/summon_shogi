@@ -107,10 +107,29 @@ class _SummonShogiPageState extends State<SummonShogiPage> {
         validMoves.any(
             (coordinate) => coordinate[0] == row && coordinate[1] == col)) {
       movePiece(row, col);
+    } else if (isSelectingDropPosition && shogiBoard[row][col] == null) {
+      // 空き座標にセット
+      shogiBoard[row][col] = selectedPiece;
+
+      // 持ち駒から削除
+      if (selectedPiece!.isAlly) {
+        piecesTakenByAlly.remove(selectedPiece);
+      } else {
+        piecesTakenByEnemy.remove(selectedPiece);
+      }
     }
 
-    validMoves = calculateRawValidMoves(
-        shogiBoard, selectedRow, selectedCol, selectedPiece); // 移動可能な座標を計算
+    // 現在の選択をリセット
+    selectedPiece = null;
+    selectedRow = -1;
+    selectedCol = -1;
+    validMoves = [];
+    isSelectingDropPosition = false;
+
+    turnChange();
+
+    // validMoves = calculateRawValidMoves(
+    //     shogiBoard, selectedRow, selectedCol, selectedPiece); // 移動可能な座標を計算
   }
 
   @override
@@ -195,6 +214,7 @@ class _SummonShogiPageState extends State<SummonShogiPage> {
                 isSelected: isSlected,
                 onTap: () => selectPiece(row, col),
                 isValidMove: isValidMove,
+                isSelectingDropPosition: isSelectingDropPosition,
               );
             },
           ),
@@ -210,11 +230,13 @@ class _SummonShogiPageState extends State<SummonShogiPage> {
               },
               child: Container(
                 decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 2.0,
-                    color: isSelectingDropPosition && selectedPiece == piecesTakenByAlly[index] ? Colors.black26 : Colors.transparent,
-                  )
-                ),
+                    border: Border.all(
+                  width: 2.0,
+                  color: isSelectingDropPosition &&
+                          selectedPiece == piecesTakenByAlly[index]
+                      ? Colors.black26
+                      : Colors.transparent,
+                )),
                 child: Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Image.asset(piecesTakenByAlly[index].imagePath),

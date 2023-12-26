@@ -8,6 +8,7 @@ class Square extends StatelessWidget {
   final bool isSelected; // 選択されているかどうか
   final void Function()? onTap; // タップされた時に呼ばれるメソッド
   final bool isValidMove; // 選択中の駒が移動可能か
+  final bool isSelectingDropPosition; // 手持ちの駒を打とうとしているか
 
   const Square({
     super.key,
@@ -15,6 +16,7 @@ class Square extends StatelessWidget {
     required this.isSelected,
     required this.onTap,
     required this.isValidMove,
+    required this.isSelectingDropPosition,
   });
 
   @override
@@ -22,7 +24,9 @@ class Square extends StatelessWidget {
     Color? squareColor;
 
     // 座標の状態によって背景色を変化
-    if (isSelected) {
+    if (isSelectingDropPosition && shogiPiece == null) {
+      squareColor = Colors.green[100]; // 選択中の駒を打つことができる
+    } else if (isSelected) {
       squareColor = Colors.green; // 駒を選択中
     } else if (isValidMove) {
       squareColor = Colors.green[100]; // 選択中の駒が移動可能
