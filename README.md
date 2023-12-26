@@ -1,6 +1,8 @@
-# summon_shogi
+# summon_shogi【召喚将棋】
 
 A new Flutter project.
+
+召喚将棋は、初心者から上級者まで分け隔てなく対戦を楽しむことのできるランダム性のある将棋の新しい遊び方です。
 
 ## Getting Started
 
